@@ -15,11 +15,11 @@ class ForgotPasswordPage extends StatelessWidget {
             onPressed: () {
               //TODO: GO TO PROFILE PAGE
 
-              context.go('/signup');
+              context.go('/login');
             },
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Text("Go to signup page"),
+              child: Text("Go to login page"),
             )),
       ),
       ),
