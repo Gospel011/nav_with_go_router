@@ -16,12 +16,10 @@ class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
-  AppRouter({required this.authCubit});
+  static final AuthCubit authCubit = AuthCubit();
 
-  final AuthCubit authCubit;
-
-  GoRouter get router => GoRouter(
-      initialLocation: '/login',
+  static final router = GoRouter(
+    initialLocation: '/login',
       navigatorKey: _rootNavigatorKey,
       routes: [
         //? BASE ROUTE______________________________________________
@@ -35,7 +33,7 @@ class AppRouter {
             branches: [
               StatefulShellBranch(routes: [
                 GoRoute(
-                    path: '/home1',
+                    path: '/',
                     builder: (context, state) => const HomePage(),
                     routes: [
                       GoRoute(
@@ -92,13 +90,16 @@ class AppRouter {
         print("M A T C H E D   L O C A T I O N: ${state.matchedLocation},");
 
         if (state.matchedLocation == '/login') {
+          print("here");
+
           if (authCubit.state is AuthLogednIn) {
+            print("here2");
             print("REDIRECTING TO HOME");
             return '/home1';
           }
         }
 
-        return null;
+        return state.matchedLocation;
       },
       debugLogDiagnostics: true);
 }

@@ -25,6 +25,12 @@ class AuthCubit extends HydratedCubit<AuthState> {
       required String email}) async {
     emit(AuthSigningUp());
 
+    if (firstName.length <= 1 || lastName.length <= 1 || !email.contains("@")) {
+      emit(AuthSignupFailed(error: "Please specify your details"));
+
+      return;
+    }
+
     Future.delayed(Duration(seconds: Random().nextInt(5)), () {
       emit(AuthSignedUp(
           user: User(

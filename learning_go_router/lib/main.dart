@@ -18,12 +18,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppRouter appRouter = AppRouter();
     return BlocProvider<AuthCubit>(
-      create: (context) => AuthCubit(),
+      create: (context) => AppRouter.authCubit,
       child: Builder(
         builder: (context) {
 
-          final AppRouter appRouter = AppRouter(authCubit: context.read<AuthCubit>());
 
           return MaterialApp.router(
             title: 'Flutter Demo',
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
               ),
               useMaterial3: false,
             ),
-            routerConfig: appRouter.router,
+            routerConfig: AppRouter.router,
           );
         }
       ),

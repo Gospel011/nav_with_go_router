@@ -51,7 +51,7 @@ class LoginPage extends StatelessWidget {
               child: MyElevatedButton(
                 text: "Login",
                 onPressed: () {
-                  context.go('/home1');
+                  context.go('/');
                 },
               ),
             ),
