@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learning_go_router/Models/user_model.dart';
+import 'package:learning_go_router/Presentation/widgets/my_elevated_button.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -10,70 +11,68 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("L O G I N")),
       body: Center(
-        child: Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          alignment: WrapAlignment.center,
+          child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-                onPressed: () {
-                  //TODO: GO TO PROFILE PAGE
+            //? EMAIL TEXTFIELD
+            const TextField(
+              decoration: InputDecoration(hintText: "Email"),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
 
-                  context.go('/login/signup');
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text("Go to signup page"),
-                )),
-            ElevatedButton(
-                onPressed: () {
-                  //TODO: GO TO PROFILE PAGE
+            //? PASSWORD TEXTFIELD
+            const TextField(
+              decoration: InputDecoration(hintText: "Password"),
+            ),
 
+            //? FORGOT PASSWORD TEXT BUTTON
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      context.go('/login/forgot-password');
+                    },
+                    child: Text("Forgot password?"))
+              ],
+            ),
+
+            const SizedBox(
+              height: 24,
+            ),
+
+            //? LOGIN BUTTON
+            SizedBox(
+              width: double.maxFinite,
+              child: MyElevatedButton(
+                text: "Login",
+                onPressed: () {
                   context.go('/home1');
                 },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text("Go to home page"),
-                )),
-            ElevatedButton(
-                onPressed: () {
-                  //TODO: GO TO PROFILE PAGE
+              ),
+            ),
 
-                  context.go('/login/forgot-password');
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text("Go to forgot password page"),
-                )),
-            ElevatedButton(
-                onPressed: () {
-                  //TODO: GO TO PROFILE PAGE
-
-                  context.go('/verify-email');
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text("Go to verify-email password page"),
-                )),
-            ElevatedButton(
-                onPressed: () {
-                  //TODO: GO TO PROFILE PAGE
-
-                  const User user = User(
-                      id: "iejei9398jfEerE#3gaof",
-                      firstName: "John",
-                      lastName: "Doe",
-                      email: "johndoe@gmail.com");
-
-                  context.go('/profile/${user.id}', extra: user);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text("Go to profile page"),
-                )),
+            //? DON'T HAVE AN ACCOUT SIGNUP
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Text("Don't have an account?"),
+                TextButton(
+                    onPressed: () {
+                      context.go('/login/signup');
+                    },
+                    child: const Text("signup"))
+              ],
+            )
           ],
         ),
-      ),
+      )),
     );
   }
 }
+
+

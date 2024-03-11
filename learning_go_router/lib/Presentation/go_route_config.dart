@@ -1,4 +1,6 @@
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learning_go_router/BusinessLogic/AuthCubit/auth_cubit.dart';
 import 'package:learning_go_router/Models/user_model.dart';
 import 'package:learning_go_router/Presentation/pages/forgot_password.dart';
 import 'package:learning_go_router/Presentation/pages/home_pages/home_page.dart';
@@ -10,68 +12,93 @@ import 'package:learning_go_router/Presentation/pages/profile_page.dart';
 import 'package:learning_go_router/Presentation/pages/signup.dart';
 import 'package:learning_go_router/Presentation/pages/verify_email_page.dart';
 
-final router = GoRouter(
-    initialLocation: '/login',
-    routes: [
-      //? BASE ROUTE______________________________________________
-      GoRoute(
-          path: 'profile/:id',
-          builder: (context, state) {
-            final String id = state.pathParameters['id']!;
-            final User user = state.extra as User;
-            return ProfilePage(
-              id: id,
-              user: user,
-            );
-          }),
+class AppRouter {
+  static final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  static final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
-      //? SHELL ROUTE
-      StatefulShellRoute.indexedStack(
-          builder: (context, state, navigationShell) {
-            return HomePageMain(shell: navigationShell);
-          },
-          branches: [
-            StatefulShellBranch(routes: [
-              GoRoute(
-                path: '/home1',
-                builder: (context, state) => HomePage(),
-              ),
+  AppRouter({required this.authCubit});
+
+  final AuthCubit authCubit;
+
+  GoRouter get router => GoRouter(
+      initialLocation: '/login',
+      navigatorKey: _rootNavigatorKey,
+      routes: [
+        //? BASE ROUTE______________________________________________
+
+        //? SHELL ROUTE
+        StatefulShellRoute.indexedStack(
+            builder: (context, state, navigationShell) {
+              // print("H O M E   S H E L L");
+              return HomePageMain(shell: navigationShell);
+            },
+            branches: [
+              StatefulShellBranch(routes: [
+                GoRoute(
+                    path: '/home1',
+                    builder: (context, state) => const HomePage(),
+                    routes: [
+                      GoRoute(
+                          path: 'profile/:id',
+                          parentNavigatorKey: _rootNavigatorKey,
+                          builder: (context, state) {
+                            final String id = state.pathParameters['id']!;
+                            final User user = state.extra as User;
+                            return ProfilePage(
+                              id: id,
+                              user: user,
+                            );
+                          }),
+                    ]),
+              ]),
+              StatefulShellBranch(routes: [
+                GoRoute(
+                  path: '/home2',
+                  builder: (context, state) => const SecondHomePage(),
+                ),
+              ]),
+              StatefulShellBranch(routes: [
+                GoRoute(
+                  path: '/home3',
+                  builder: (context, state) => const ThirdHomePage(),
+                ),
+              ])
             ]),
-            StatefulShellBranch(routes: [
+
+        //? LOGIN_______________________________________________________
+        GoRoute(
+            path: '/login',
+            builder: ((context, state) => const LoginPage()),
+            routes: [
+              //* signup
               GoRoute(
-                path: '/home2',
-                builder: (context, state) => SecondHomePage(),
-              ),
+                  path: 'signup',
+                  builder: (context, state) => const SignupPage()),
+
+              //*forgot password
+              GoRoute(
+                  path: 'forgot-password',
+                  builder: (context, state) => const ForgotPasswordPage())
             ]),
-            StatefulShellBranch(routes: [
-              GoRoute(
-                path: '/home3',
-                builder: (context, state) => ThirdHomePage(),
-              ),
-            ])
-          ]),
 
-      //? LOGIN_______________________________________________________
-      GoRoute(
-          path: '/login',
-          builder: ((context, state) => const LoginPage()),
-          routes: [
-            //* signup
-            GoRoute(
-                path: 'signup',
-                builder: (context, state) => const SignupPage()),
+        //? EMAIL VERIFICATION____________________________________________
+        GoRoute(
+            path: '/verify-email',
+            builder: (context, state) => const VerifyEmailPage()),
 
-            //*forgot password
-            GoRoute(
-                path: 'forgot-password',
-                builder: (context, state) => const ForgotPasswordPage())
-          ]),
+        //?
+      ],
+      redirect: (context, state) {
+        print("M A T C H E D   L O C A T I O N: ${state.matchedLocation},");
 
-      //? EMAIL VERIFICATION____________________________________________
-      GoRoute(
-          path: '/verify-email',
-          builder: (context, state) => const VerifyEmailPage()),
+        if (state.matchedLocation == '/login') {
+          if (authCubit.state is AuthLogednIn) {
+            print("REDIRECTING TO HOME");
+            return '/home1';
+          }
+        }
 
-      //?
-    ],
-    debugLogDiagnostics: true);
+        return null;
+      },
+      debugLogDiagnostics: true);
+}

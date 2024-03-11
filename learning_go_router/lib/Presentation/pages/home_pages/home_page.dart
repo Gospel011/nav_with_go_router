@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learning_go_router/Models/user_model.dart';
+import 'package:learning_go_router/Presentation/widgets/my_elevated_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,7 +9,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ElevatedButton(
+      child: MyElevatedButton(
           onPressed: () {
             //TODO: GO TO PROFILE PAGE
 
@@ -18,12 +19,9 @@ class HomePage extends StatelessWidget {
                 lastName: "Doe",
                 email: "johndoe@gmail.com");
 
-            context.push('/profile/${user.id}', extra: user);
+            context.push('/home1/profile/${user.id}', extra: user);
           },
-          child: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.0),
-            child: Text("Go to profile page"),
-          )),
+          text: "Go to profile page"),
     );
   }
 }

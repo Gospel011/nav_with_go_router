@@ -26,7 +26,7 @@ class ProfilePage extends StatelessWidget {
                   onPressed: () {
                     //TODO: GO TO PROFILE PAGE
               
-                    context.go('/');
+                    context.go('/home1');
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),

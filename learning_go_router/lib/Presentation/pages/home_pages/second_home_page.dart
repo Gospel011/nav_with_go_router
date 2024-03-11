@@ -26,7 +26,7 @@ class SecondHomePage extends StatelessWidget {
                     lastName: "Doe",
                     email: "johndoe@gmail.com");
           
-                context.push('/profile/${user.id}', extra: user);
+                context.push('/home1/profile/${user.id}', extra: user);
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
