@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learning_go_router/Models/user_model.dart';
 import 'package:learning_go_router/Presentation/widgets/my_elevated_button.dart';
+import 'package:learning_go_router/Presentation/widgets/my_expandable_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,6 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _text = TextEditingController();
+  final _phone = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,23 @@ class _HomePageState extends State<HomePage> {
                 height: 64,
               ),
               MyExpandableText(text: _text.text),
+
+              const SizedBox(height: 10),
+
+              Row(children: [
+                TextButton(child: Text(_phone.text), onPressed: (){
+                  print("${_phone.text} pressed");
+
+                  try {
+                    int.parse(_phone.text);
+                    launchUrl(Uri.parse("tel:${_phone.text}"));
+                  } catch(e) {
+                    print("Error is $e");
+
+                  }
+                }),
+              ]),
+              
               const SizedBox(
                 height: 48,
               ),
@@ -45,45 +65,27 @@ class _HomePageState extends State<HomePage> {
                       setState(() {});
                     },
                     text: "Post"),
+              ),
+
+              const SizedBox(height: 32),
+
+              TextField(
+                controller: _phone,
+                decoration: const InputDecoration(hintText: "Enter phone number"),
+              ),
+
+              const SizedBox(height: 24),
+
+              MyElevatedButton(
+                onPressed: () {
+                  setState((){});
+                },
+                text: "Update phone number"
               )
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class MyExpandableText extends StatelessWidget {
-  const MyExpandableText({super.key, required this.text});
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return ExpandableText(
-      maxLines: 5,
-      collapseOnTextTap: true,
-      onUrlTap: (url) {
-        print("Url $url tapped");
-      },
-      urlStyle: TextStyle(
-        color: Colors.blue.shade300,
-      ),
-      linkStyle: TextStyle(
-        color: Colors.grey.shade300,
-      ),
-      expandOnTextTap: true,
-      text,
-      expandText: "read more",
-      hashtagStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-      onHashtagTap: (value) {
-        print("Hashtag $value tapped");
-      },
-      mentionStyle: TextStyle(color: Colors.blue),
-      onMentionTap: (value) {
-        print("Mention: $value tapped");
-      },
-      collapseText: "",
     );
   }
 }
